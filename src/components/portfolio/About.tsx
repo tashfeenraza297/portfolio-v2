@@ -46,14 +46,14 @@ export function About() {
               <div>
                 <div className="text-xs font-mono uppercase tracking-widest text-muted-foreground">Education</div>
                 <div className="font-semibold mt-0.5">BS Artificial Intelligence</div>
-                <div className="text-sm text-muted-foreground">NUML · 2021–2025</div>
+                <div className="text-sm text-muted-foreground">NUML · Feb 2022 – Jan 2026</div>
               </div>
             </div>
 
             <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent" />
 
             <p className="text-sm text-muted-foreground leading-relaxed">
-              I care about shipping AI that actually works in production — measurable, observable, and useful. From concept to deployment, I focus on the messy details others skip.
+              I care about shipping AI that actually works in production  measurable, observable, and useful. From concept to deployment, I focus on the messy details others skip.
             </p>
           </div>
         </motion.div>
