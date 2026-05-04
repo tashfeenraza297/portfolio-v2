@@ -109,7 +109,9 @@ export function Hero() {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="mt-6 max-w-2xl mx-auto text-base sm:text-lg text-muted-foreground"
         >
-          {personal.title} <span className="text-foreground/70">·</span> {personal.subtitle}
+          {personal.subtitle.split("\n").map((line, i) => (
+            <span key={i} className={i > 0 ? "block" : ""}>{line}</span>
+          ))}
         </motion.p>
 
         <motion.div
@@ -119,6 +121,14 @@ export function Hero() {
           className="mt-3 inline-flex items-center gap-1.5 text-sm text-muted-foreground"
         >
           <MapPin size={14} /> {personal.location}
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.55 }}
+          className="mt-1.5 inline-flex items-center gap-1.5 text-xs text-muted-foreground/70"
+        >
+          🌍 Working with clients globally — US · UK · Europe · Australia
         </motion.div>
 
         <motion.div

@@ -1,4 +1,4 @@
-import { Github, Linkedin, Mail, ExternalLink, Heart } from "lucide-react";
+import { Github, Linkedin, Mail, Heart } from "lucide-react";
 import { personal } from "@/lib/portfolio-data";
 
 export function Footer() {
@@ -9,7 +9,7 @@ export function Footer() {
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <span>Built with</span>
           <Heart size={14} className="text-[var(--neon-pink)] fill-[var(--neon-pink)]" />
-          <span>for AI & Machine Learning</span>
+          <span>· Open to freelance projects & full-time roles · razatashfeen045@gmail.com</span>
         </div>
 
         <div className="flex items-center gap-1">
@@ -17,7 +17,6 @@ export function Footer() {
             { icon: Mail, href: personal.socials.email },
             { icon: Github, href: personal.socials.github },
             { icon: Linkedin, href: personal.socials.linkedin },
-            { icon: ExternalLink, href: personal.socials.fiverr },
           ].map((s, i) => (
             <a
               key={i}

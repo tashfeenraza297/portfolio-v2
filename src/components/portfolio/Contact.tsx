@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Check, Copy, Github, Linkedin, Mail, Send, ExternalLink } from "lucide-react";
+import { Check, Copy, Github, Linkedin, Mail, MessageCircle, Send, ExternalLink } from "lucide-react";
 import { Section } from "./Section";
 import { personal } from "@/lib/portfolio-data";
 
@@ -8,12 +8,13 @@ const socials = [
   { name: "Email", icon: Mail, href: personal.socials.email, label: personal.email },
   { name: "GitHub", icon: Github, href: personal.socials.github, label: "github.com/tashfeenraza297" },
   { name: "LinkedIn", icon: Linkedin, href: personal.socials.linkedin, label: "linkedin.com/in/tashfeen-raza-2a8b35253" },
-  { name: "Fiverr", icon: ExternalLink, href: personal.socials.fiverr, label: "fiverr.com/tashfeen348" },
 ];
 
 export function Contact() {
   const [copied, setCopied] = useState(false);
   const [sent, setSent] = useState(false);
+  const [error, setError] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const copy = async () => {
     await navigator.clipboard.writeText(personal.email);
@@ -21,10 +22,30 @@ export function Contact() {
     setTimeout(() => setCopied(false), 1800);
   };
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSent(true);
-    setTimeout(() => setSent(false), 2500);
+    setSubmitting(true);
+    setError(false);
+    const form = e.currentTarget;
+    const data = new FormData(form);
+    try {
+      const res = await fetch("https://formspree.io/f/mnjwpznv", {
+        method: "POST",
+        body: data,
+        headers: { Accept: "application/json" },
+      });
+      if (res.ok) {
+        setSent(true);
+        form.reset();
+        setTimeout(() => setSent(false), 4000);
+      } else {
+        setError(true);
+      }
+    } catch {
+      setError(true);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -48,6 +69,7 @@ export function Contact() {
             <Field label="Name" id="name">
               <input
                 id="name"
+                name="name"
                 required
                 placeholder="Your name"
                 className="w-full rounded-xl bg-white/5 border border-border px-4 py-3 text-sm placeholder:text-muted-foreground/60 focus:outline-none focus:border-[var(--neon-blue)] focus:bg-white/10 transition-colors"
@@ -56,9 +78,10 @@ export function Contact() {
             <Field label="Email" id="email">
               <input
                 id="email"
+                name="email"
                 type="email"
                 required
-                placeholder="you@company.com"
+                placeholder="you@example.com"
                 className="w-full rounded-xl bg-white/5 border border-border px-4 py-3 text-sm placeholder:text-muted-foreground/60 focus:outline-none focus:border-[var(--neon-blue)] focus:bg-white/10 transition-colors"
               />
             </Field>
@@ -66,6 +89,7 @@ export function Contact() {
           <Field label="Message" id="msg">
             <textarea
               id="msg"
+              name="message"
               required
               rows={5}
               placeholder="Tell me about the project, timeline, and goals…"
@@ -73,15 +97,18 @@ export function Contact() {
             />
           </Field>
 
+          <div className="flex flex-col sm:flex-row gap-3">
           <button
             type="submit"
-            disabled={sent}
+            disabled={sent || submitting}
             className="group inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-gradient-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-glow-blue hover:scale-[1.02] transition-transform disabled:opacity-70"
           >
             {sent ? (
               <>
                 <Check size={16} /> Sent!
               </>
+            ) : submitting ? (
+              <>Sending…</>
             ) : (
               <>
                 <Send size={16} className="group-hover:translate-x-0.5 transition-transform" />
@@ -89,6 +116,19 @@ export function Contact() {
               </>
             )}
           </button>
+          <a
+            href="https://wa.me/923075286602"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl border border-[#25D366]/40 bg-[#25D366]/10 px-6 py-3 text-sm font-semibold text-[#25D366] hover:bg-[#25D366]/20 hover:scale-[1.02] transition-all"
+          >
+            <MessageCircle size={16} />
+             Prefer WhatsApp? Chat directly →
+          </a>
+          </div>
+          {error && (
+            <p className="text-sm text-red-400">Something went wrong. Please try again or email me directly.</p>
+          )}
         </motion.form>
 
         {/* Socials */}
